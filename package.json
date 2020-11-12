@@ -1,0 +1,86 @@
+{
+  "name": "show-it",
+  "version": "1.0.0",
+  "description": "Make html element to be slider view",
+  "author": "imcuttle <imcuttle@163.com>",
+  "scripts": {
+    "test": "npx jest",
+    "test:watch": "npm test -- --watch",
+    "preversion": "npm test",
+    "build": "npm run clean && run-p --print-label \"build:**\"",
+    "dev": "TSC_OPTIONS=\"--watch\" npm run build",
+    "build:es": "tsc $TSC_OPTIONS --outDir es --module es6",
+    "build:cjs": "tsc $TSC_OPTIONS --outDir lib",
+    "build:tds": "tsc $TSC_OPTIONS --emitDeclarationOnly -d",
+    "clean": "rimraf types es lib",
+    "prepare": "npm run build",
+    "version": "npm run changelog",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged",
+      "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS"
+    }
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=10"
+  },
+  "files": [
+    "es",
+    "types",
+    "lib",
+    "src"
+  ],
+  "keywords": [
+    "imcuttle",
+    "show",
+    "it",
+    "show-it"
+  ],
+  "main": "lib",
+  "types": "types",
+  "license": "MIT",
+  "repository": "imcuttle/show-it",
+  "module": "es",
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest",
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "testMatch": [
+      "**/__test{s,}__/*.(spec|test).{t,j}s{x,}"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "@types/jest": "^26.0.15",
+    "conventional-changelog-cli": "^2.1.1",
+    "husky": "^4.3.0",
+    "jest": "^26.6.3",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.1.2",
+    "pretty-quick": "^3.1.0",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.0.5"
+  },
+  "dependencies": {
+    "wowsearch-parse": "^0.2.0"
+  }
+}
