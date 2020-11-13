@@ -81,6 +81,8 @@
     "typescript": "^4.0.5"
   },
   "dependencies": {
+    "reveal.js": "^4.1.0",
+    "run-seq": "^1.0.4",
     "wowsearch-parse": "^0.2.0"
   }
 }
