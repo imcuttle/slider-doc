@@ -91,6 +91,6 @@
   "dependencies": {
     "reveal.js": "^4.1.0",
     "run-seq": "^1.0.4",
-    "wowsearch-parse": "^0.2.0"
+    "wowsearch-parse": "^0.3.0"
   }
 }

@@ -29,7 +29,9 @@ type Options = {
 const defaultRenderers = [
   (vNode: LvlNode, state, render) => {
     if (vNode.type === 'lvl') {
-      return `${(vNode.domNode as HTMLElement).outerHTML || vNode.domNode.textContent}${render(vNode.children)}`
+      return `<section>${(vNode.domNode as HTMLElement).outerHTML || vNode.domNode.textContent}</section>${render(
+        vNode.children
+      )}`
     }
     return render()
   },
@@ -97,10 +99,8 @@ function generateHTML(
 function showIt(selector: Selectors, { document = global.document }: Options = {}) {
   // reveal.
   const documentNode = parseElementTree(document.documentElement, selector)
-  console.log('documentNode', documentNode)
 
   const html = generateHTML(documentNode, [], (node, child) => `<section>${child}</section>`)
-  console.log(html)
 
   const container = document.createElement('div')
   container.className = 'show-it-container reveal'
