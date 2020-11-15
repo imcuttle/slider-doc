@@ -4,10 +4,19 @@
  */
 
 import parseElementTree from 'wowsearch-parse'
-import * as Reveal from 'reveal.js'
 import { Selector } from 'wowsearch-parse/dist/types/Config'
 import DocumentNode from 'wowsearch-parse/dist/types/DocumentNode'
-import runSeq, { waterFall } from 'run-seq'
+import ContentNode from 'wowsearch-parse/dist/types/ContentNode'
+
+import Reveal from 'reveal.js'
+import 'reveal.js/dist/reveal.css'
+
+import 'reveal.js/dist/theme/night.css'
+
+import runSeq from 'run-seq'
+import LvlNode from 'wowsearch-parse/dist/types/LvlNode'
+
+import './style.css'
 
 type Selectors = Partial<Parameters<typeof parseElementTree>[1]> & {
   [name: string]: Selector
@@ -18,11 +27,17 @@ type Options = {
 }
 
 const defaultRenderers = [
-  (node, state, render) => {
+  (vNode: LvlNode, state, render) => {
+    if (vNode.type === 'lvl') {
+      return `${(vNode.domNode as HTMLElement).outerHTML || vNode.domNode.textContent}${render(vNode.children)}`
+    }
     return render()
-    // if (node.type === 'lvl') {
-    //   return ''
-    // }
+  },
+  (vNode: ContentNode, state, render) => {
+    if (vNode.type === 'text') {
+      return `${(vNode.domNode as HTMLElement).outerHTML || vNode.domNode.textContent}`
+    }
+    return render()
   }
 ]
 
@@ -42,14 +57,14 @@ function generateHTML(
         return ''
       }
       if (Array.isArray(node)) {
-        let renderWrap = (node, child) => child
-        if (node === documentNode.children) {
-          renderWrap = renderSection
-        }
+        // let renderWrap = (node, child) => child
+        // if (node === documentNode.children) {
+        //   renderWrap = renderSection
+        // }
 
         return node
           .map((node) => {
-            return renderWrap(node, next(node) || '')
+            return renderSection(node, next(node) || '')
           })
           .join('\n')
       }
@@ -84,18 +99,21 @@ function showIt(selector: Selectors, { document = global.document }: Options = {
   const documentNode = parseElementTree(document.documentElement, selector)
   console.log('documentNode', documentNode)
 
-  generateHTML(documentNode, [])
+  const html = generateHTML(documentNode, [], (node, child) => `<section>${child}</section>`)
+  console.log(html)
 
   const container = document.createElement('div')
-  container.className = 'show-it-container'
+  container.className = 'show-it-container reveal'
 
-  // container.
+  container.innerHTML = `<div class="slides">
+${html}
+</div>`
 
   document.body.appendChild(container)
 
   const reveal = new Reveal(container, {
-    embedded: true,
-    keyboardCondition: 'focused'
+    // embedded: true,
+    // keyboardCondition: 'focused'
   })
   reveal.initialize()
 
