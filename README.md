@@ -22,7 +22,13 @@ yarn add doc-slider
 ```javascript
 const docSlider = require('doc-slider')
 
-docSlider(document, {})
+docSlider({
+  lvl0: '.doc h1',
+  lvl1: '.doc h2',
+  lvl2: '.doc h3',
+  lvl3: '.doc h4',
+  lvl4: '.doc h5'
+})
 ```
 
 ## Contributing
