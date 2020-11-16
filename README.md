@@ -1,9 +1,9 @@
-# show-it
+# doc-slider
 
-[![Build status](https://img.shields.io/travis/imcuttle/show-it/master.svg?style=flat-square)](https://travis-ci.org/imcuttle/show-it)
-[![Test coverage](https://img.shields.io/codecov/c/github/imcuttle/show-it.svg?style=flat-square)](https://codecov.io/github/imcuttle/show-it?branch=master)
-[![NPM version](https://img.shields.io/npm/v/show-it.svg?style=flat-square)](https://www.npmjs.com/package/show-it)
-[![NPM Downloads](https://img.shields.io/npm/dm/show-it.svg?style=flat-square&maxAge=43200)](https://www.npmjs.com/package/show-it)
+[![Build status](https://img.shields.io/travis/imcuttle/doc-slider/master.svg?style=flat-square)](https://travis-ci.org/imcuttle/doc-slider)
+[![Test coverage](https://img.shields.io/codecov/c/github/imcuttle/doc-slider.svg?style=flat-square)](https://codecov.io/github/imcuttle/doc-slider?branch=master)
+[![NPM version](https://img.shields.io/npm/v/doc-slider.svg?style=flat-square)](https://www.npmjs.com/package/doc-slider)
+[![NPM Downloads](https://img.shields.io/npm/dm/doc-slider.svg?style=flat-square&maxAge=43200)](https://www.npmjs.com/package/doc-slider)
 [![Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://prettier.io/)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=flat-square)](https://conventionalcommits.org)
 
@@ -12,15 +12,15 @@
 ## Installation
 
 ```bash
-npm install show-it
+npm install doc-slider
 # or use yarn
-yarn add show-it
+yarn add doc-slider
 ```
 
 ## Usage
 
 ```javascript
-const showIt = require('show-it')
+const showIt = require('doc-slider')
 ```
 
 ## Contributing

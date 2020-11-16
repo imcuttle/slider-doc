@@ -1,4 +1,4 @@
-.show-it-container {
+.doc-slider-container {
   position: fixed;
   top: 0;
   left: 0;
@@ -6,6 +6,6 @@
   bottom: 0;
 }
 
-.show-it-container *[hidden] {
+.doc-slider-container *[hidden] {
   display: inherit !important;
 }

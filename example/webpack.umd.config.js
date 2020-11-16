@@ -6,7 +6,7 @@ module.exports = [
     name: '1',
     mode: 'development',
     output: {
-      filename: 'show-it.js',
+      filename: 'doc-slider.js',
       libraryTarget: 'umd'
     }
   }),
@@ -14,7 +14,7 @@ module.exports = [
     name: '2',
     mode: 'production',
     output: {
-      filename: 'show-it.min.js',
+      filename: 'doc-slider.min.js',
       libraryTarget: 'umd'
     }
   })

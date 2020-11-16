@@ -160,7 +160,7 @@ function showIt(
       return `data-transition="fade-in slide-out"`
     },
     injectId = true,
-    injectIdPrefix = 'show-it_'
+    injectIdPrefix = 'doc-slider_'
   }: Options = {}
 ) {
   const docElem = global.document.documentElement.cloneNode(true) as any
@@ -186,7 +186,7 @@ function showIt(
   const html = generateHTML(documentNode, renderers, renderSection)
 
   const container = document.createElement('div')
-  container.className = 'show-it-container reveal'
+  container.className = 'doc-slider-container reveal'
   container.style.zIndex = String(Number.MAX_SAFE_INTEGER)
 
   container.innerHTML = `<div class="slides">
