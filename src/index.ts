@@ -4,6 +4,7 @@
  */
 
 import parseElementTree from 'wowsearch-parse'
+import { htmlEscape } from 'escape-goat'
 import { Selector } from 'wowsearch-parse/dist/types/Config'
 import DocumentNode from 'wowsearch-parse/dist/types/DocumentNode'
 import ContentNode from 'wowsearch-parse/dist/types/ContentNode'
@@ -15,12 +16,14 @@ import 'reveal.js/dist/theme/blood.css'
 import Zoom from 'reveal.js/plugin/zoom/zoom.esm.js'
 import Search from 'reveal.js/plugin/search/search.esm.js'
 import Highlight from 'reveal.js/plugin/highlight/highlight.esm.js'
+import 'reveal.js/plugin/highlight/monokai.css'
 
 import runSeq from 'run-seq'
 import LvlNode from 'wowsearch-parse/dist/types/LvlNode'
 
 import './style.css'
-import * as webpack from 'webpack'
+import TextNode from 'wowsearch-parse/dist/types/TextNode'
+import { selectAll } from 'wowsearch-parse/dist/selectVal'
 
 type Selectors = Partial<Parameters<typeof parseElementTree>[1]> & {
   [name: string]: Selector
@@ -28,6 +31,7 @@ type Selectors = Partial<Parameters<typeof parseElementTree>[1]> & {
 
 type Options = {
   document?: Document
+  excludes?: Selector[]
   mountContainer?: Element
   revealConfig?: any
   renderers?: typeof defaultRenderers
@@ -40,19 +44,40 @@ type Options = {
 const defaultRenderers = [
   (vNode: LvlNode, ctx, render) => {
     if (vNode.type === 'lvl') {
-      return `${ctx.renderSection((vNode.domNode as HTMLElement).outerHTML || vNode.value, vNode, ctx)}${render(
-        vNode.children
-      )}`
+      return `${ctx.renderSection(
+        (vNode.domNode as HTMLElement).outerHTML || htmlEscape(vNode.value),
+        vNode,
+        ctx
+      )}${render(vNode.children)}`
     }
     return render()
   },
   (vNode: ContentNode, ctx, render) => {
     if (vNode.type === 'text') {
-      return `${(vNode.domNode as HTMLElement).outerHTML || vNode.value}`
+      return `${(vNode.domNode as HTMLElement).outerHTML || htmlEscape(vNode.value)}`
     }
     return render()
   }
 ]
+
+const flattenLvlNode = (node: any) => {
+  return node.reduce((acc, node) => {
+    let nodes = acc
+    if (node.type === 'lvl') {
+      const head = new TextNode(node.value)
+      head.domNode = node.domNode
+      nodes.push(head)
+
+      node.children.forEach((childNode) => {
+        nodes = nodes.concat(flattenLvlNode([childNode]))
+      })
+
+      return nodes
+    }
+
+    return nodes.concat(node)
+  }, [])
+}
 
 function generateHTML(
   documentNode: DocumentNode,
@@ -70,9 +95,15 @@ function generateHTML(
         return ''
       }
       if (Array.isArray(node)) {
-        return node
-          .map((node) => {
-            return renderSection(next(node) || '', node, ctx)
+        let nodes = node
+        if (ctx.depth) {
+          nodes = flattenLvlNode(node)
+        }
+
+        return nodes
+          .map((node, index) => {
+            const newCtx = { ...ctx, index }
+            return renderSection(next(node, newCtx) || '', node, newCtx)
           })
           .join('\n')
       }
@@ -88,48 +119,68 @@ function generateHTML(
     .map((render) => (node, ctx, next) => {
       return render(node, ctx, (...args) => {
         ctx.renderSection = renderSection
-        if (args.length) {
+        if (args.length && Array.isArray(args[0])) {
           return next.all(...args, {
             ...ctx,
             parent: node,
+            parentCtx: ctx,
             depth: ctx.depth + 1
           })
         }
-        return next(node, ctx)
+
+        return next(...args.concat([node, ctx].slice(args.length)))
       })
     })
 
   const state = {
     documentNode,
     global,
-    depth: 0
+    depth: 0,
+    parent: null,
+    index: 0
   }
 
   return runSeq(renderList, [documentNode.children, state])
+}
+
+function randomInt(min = 0, max = 1) {
+  return Math.round((Math.random() * (max - min + 1) + min) | 0)
 }
 
 function showIt(
   selector: Selectors,
   {
     document = global.document,
+    excludes = [],
     revealConfig,
     mountContainer = document.body,
     renderers = [],
     renderSection,
-    renderSectionAttrs = () => 'data-transition="fade-in slide-out"',
+    renderSectionAttrs = () => {
+      return `data-transition="fade-in slide-out"`
+    },
     injectId = true,
     injectIdPrefix = 'show-it_'
   }: Options = {}
 ) {
-  const documentNode = parseElementTree(document.documentElement, selector)
+  const docElem = global.document.documentElement.cloneNode(true) as any
+  excludes.forEach((selectorExclude) => {
+    const elems = selectAll(docElem, selectorExclude)
+    elems.forEach((elem) => elem.remove())
+  })
+  const documentNode = parseElementTree(docElem, selector)
 
-  const idMap = {}
+  let count = 0
   renderSection =
     renderSection ||
     ((child, node, ctx) => {
-      idMap[ctx.depth] = idMap[ctx.depth] || 0
-      idMap[ctx.depth]++
-      const attrs = injectId ? `id="${injectIdPrefix}${idMap[ctx.depth]}/${ctx.depth + 1}"` : ''
+      if (ctx.depth > 2) {
+        return child
+      }
+
+      let id = node.domNode?.getAttribute('id') || node.domNode?.getAttribute('name') || count++
+
+      const attrs = injectId ? `id="${injectIdPrefix}${id}"` : ''
       return `<section ${attrs} ${renderSectionAttrs(node, ctx)}>${child}</section>`
     })
   const html = generateHTML(documentNode, renderers, renderSection)
@@ -147,6 +198,8 @@ ${html}
   const reveal = new Reveal(container, {
     embedded: true,
     backgroundTransition: 'slide',
+    hash: true,
+    overview: true,
     slideNumber: true,
     plugins: [Highlight(), Zoom(), Search()],
     ...revealConfig
