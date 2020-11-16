@@ -4,6 +4,7 @@
   "description": "Make html element to be slider view",
   "author": "imcuttle <imcuttle@163.com>",
   "cdn": "dist/slider-doc.min.js",
+  "unpkg": "dist/slider-doc.min.js",
   "umd": "dist/slider-doc.js",
   "publishConfig": {
     "access": "public"
@@ -14,7 +15,6 @@
     "preversion": "npm test",
     "build": "npm run clean && run-p --print-label \"build:**\"",
     "dev": "TSC_OPTIONS=\"--watch\" npm run build",
-    "build:es": "tsc $TSC_OPTIONS --outDir es --module es6",
     "build:cjs": "tsc $TSC_OPTIONS --outDir lib",
     "build:tds": "tsc $TSC_OPTIONS --emitDeclarationOnly -d",
     "clean": "rimraf types es lib",
@@ -53,7 +53,6 @@
   "types": "types",
   "license": "MIT",
   "repository": "imcuttle/slider-doc",
-  "module": "es",
   "jest": {
     "transform": {
       "^.+\\.tsx?$": "ts-jest",

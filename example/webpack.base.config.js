@@ -8,7 +8,7 @@ module.exports = {
     filename: '[name].js',
     path: nps.join(__dirname, '../dist')
   },
-  entry: './src/index.tsx',
+  entry: nps.join(__dirname, '../src/index.ts'),
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
   },

@@ -1,5 +1,5 @@
 const merge = require('lodash.merge')
-const webpackConfig = require('./webpack.config')
+const webpackConfig = require('./webpack.base.config')
 
 module.exports = [
   merge({}, webpackConfig, {
@@ -8,7 +8,8 @@ module.exports = [
     output: {
       filename: 'slider-doc.js',
       libraryTarget: 'umd',
-      library: 'SliderDoc'
+      library: 'SliderDoc',
+      libraryExport: 'default'
     }
   }),
   merge({}, webpackConfig, {
@@ -17,7 +18,8 @@ module.exports = [
     output: {
       filename: 'slider-doc.min.js',
       libraryTarget: 'umd',
-      library: 'SliderDoc'
+      library: 'SliderDoc',
+      libraryExport: 'default'
     }
   })
 ]
