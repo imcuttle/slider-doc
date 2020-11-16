@@ -147,7 +147,7 @@ function randomInt(min = 0, max = 1) {
   return Math.round((Math.random() * (max - min + 1) + min) | 0)
 }
 
-function docSlider(
+function sliderDoc(
   selector: Selectors,
   {
     document = global.document,
@@ -210,4 +210,4 @@ ${html}
   return reveal
 }
 
-export default docSlider
+export default sliderDoc

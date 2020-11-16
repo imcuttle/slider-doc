@@ -8,7 +8,7 @@ module.exports = [
     output: {
       filename: 'slider-doc.js',
       libraryTarget: 'umd',
-      library: 'DocSlider'
+      library: 'SliderDoc'
     }
   }),
   merge({}, webpackConfig, {
@@ -17,7 +17,7 @@ module.exports = [
     output: {
       filename: 'slider-doc.min.js',
       libraryTarget: 'umd',
-      library: 'DocSlider'
+      library: 'SliderDoc'
     }
   })
 ]
