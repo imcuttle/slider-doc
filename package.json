@@ -1,10 +1,10 @@
 {
-  "name": "doc-slider",
+  "name": "slider-doc",
   "version": "1.0.0",
   "description": "Make html element to be slider view",
   "author": "imcuttle <imcuttle@163.com>",
-  "cdn": "dist/doc-slider.min.js",
-  "umd": "dist/doc-slider.js",
+  "cdn": "dist/slider-doc.min.js",
+  "umd": "dist/slider-doc.js",
   "publishConfig": {
     "access": "public"
   },
@@ -47,12 +47,12 @@
     "slider",
     "show",
     "it",
-    "doc-slider"
+    "slider-doc"
   ],
   "main": "lib",
   "types": "types",
   "license": "MIT",
-  "repository": "imcuttle/doc-slider",
+  "repository": "imcuttle/slider-doc",
   "module": "es",
   "jest": {
     "transform": {
