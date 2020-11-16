@@ -20,7 +20,9 @@ yarn add doc-slider
 ## Usage
 
 ```javascript
-const showIt = require('doc-slider')
+const docSlider = require('doc-slider')
+
+docSlider(document, {})
 ```
 
 ## Contributing
