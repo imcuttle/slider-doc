@@ -158,6 +158,8 @@ function generateHTML(
     index: 0
   }
 
+  console.log('documentNode', documentNode)
+
   const cloned = new DocumentNode()
   Object.assign(cloned, documentNode)
   cloned.children = []
@@ -189,19 +191,20 @@ function sliderDoc(
   const bodyElem = document.body.cloneNode(true) as any
 
   const bodyContainer = document.createElement('div')
-  bodyElem.children.forEach((child) => bodyContainer.appendChild(child))
+  const nodes = [...bodyElem.children]
+  nodes.forEach((child) => {
+    bodyContainer.appendChild(child)
+  })
 
   bodyContainer.style.opacity = '0'
   bodyContainer.style.zIndex = '-1000'
   bodyContainer.style.pointerEvents = 'none'
 
   document.body.appendChild(bodyContainer)
-
   excludes.forEach((selectorExclude) => {
     const elems = selectAll(bodyContainer, selectorExclude)
     elems.forEach((elem) => elem.remove())
   })
-
   const documentNode = parseElementTree(bodyContainer, selector, { allowInnerText: true })
 
   let count = 0
@@ -265,7 +268,7 @@ ${html}
   }
 
   reveal.addEventListener('ready', function (event) {
-    handleSlideScrolling(event.currentSlide)
+    handleSlideScrolling(event.currentSlide || event.currentTarget)
   })
 
   reveal.addEventListener('slidechanged', function (event) {

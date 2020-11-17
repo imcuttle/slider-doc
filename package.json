@@ -19,7 +19,8 @@
     "build:tds": "tsc $TSC_OPTIONS --emitDeclarationOnly -d",
     "clean": "rimraf types es lib",
     "prepare": "npm run build",
-    "example": "cd example && npx webpack-dev-server --entry ../src/",
+    "example": "cd example && npx webpack-dev-server",
+    "example:build": "cd example && npx webpack -p",
     "example:umd": "cd example && npx webpack-dev-server --config webpack.umd.config.js",
     "build:umd": "cd example && npx webpack --config webpack.umd.config.js",
     "version": "npm run changelog",
@@ -105,6 +106,6 @@
     "hotkey-chain": "^1.0.0",
     "reveal.js": "^4.1.0",
     "run-seq": "^1.0.4",
-    "wowsearch-parse": "^0.3.0"
+    "wowsearch-parse": "^0.3.1"
   }
 }

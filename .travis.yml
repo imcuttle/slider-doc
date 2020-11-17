@@ -10,8 +10,20 @@ cache:
   directories:
     - node_modules
 
-script:
-  - npm install codecov nyc --no-save
-  - npm test -- --coverage
-after_script:
-  - npx codecov --token=$CODECOV_TOKEN
+jobs:
+  include:
+    - stage: Document deploy
+      allow_failure: true
+      script: npm run example:build
+      deploy:
+        edge:
+          branch: v1.8.47
+        provider: pages
+        skip_cleanup: true
+        github_token: ${GH_TOKEN} # Set in travis-ci.org dashboard
+        local_dir: dist
+
+    - stage: Test
+      before_script: npm install codecov
+      script: npm test -- --coverage
+      after_script: npx codecov --token=$CODECOV_TOKEN

@@ -1,8 +1,9 @@
 const merge = require('lodash.merge')
+const nps = require('path')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = merge({}, require('./webpack.base.config'), {
-  entry: './src/index',
+  entry: nps.join(__dirname, './src/index.tsx'),
   mode: 'development'
 })
 

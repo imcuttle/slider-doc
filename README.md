@@ -9,6 +9,14 @@
 
 > Make html element to be slider view
 
+一建转换文档为 PPT 演示
+
+**快捷键列表：**
+
+- ESC / O : 打开整体预览模式
+- Cmd + ESC / Ctrl + ESC: 退出 PPT 模式
+- 方向键：PPT 翻页
+
 ## Installation
 
 ```bash
@@ -20,9 +28,9 @@ yarn add slider-doc
 ## Usage
 
 ```javascript
-const docSlider = require('slider-doc')
+const sliderDoc = require('slider-doc')
 
-docSlider({
+const silder = sliderDoc({
   lvl0: '.doc h1',
   lvl1: '.doc h2',
   lvl2: '.doc h3',
