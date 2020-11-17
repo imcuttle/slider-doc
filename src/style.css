@@ -9,3 +9,8 @@
 .slider-doc-container *[hidden] {
   display: inherit !important;
 }
+
+.slider-doc-scrollable-slide {
+  height: 700px;
+  overflow-y: auto !important;
+}

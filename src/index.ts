@@ -9,6 +9,8 @@ import { Selector } from 'wowsearch-parse/dist/types/Config'
 import DocumentNode from 'wowsearch-parse/dist/types/DocumentNode'
 import ContentNode from 'wowsearch-parse/dist/types/ContentNode'
 
+import { HotKeyChainManager } from 'hotkey-chain'
+
 import Reveal from 'reveal.js'
 import 'reveal.js/dist/reveal.css'
 import 'reveal.js/dist/theme/blood.css'
@@ -42,6 +44,22 @@ type Options = {
 }
 
 const defaultRenderers = [
+  (vNode: any, ctx, render) => {
+    if (vNode.type === 'document' && vNode.global.get('title')) {
+      return `${ctx.renderSection(
+        [
+          `<h2 class="slider-doc-document-title">${htmlEscape(vNode.global.get('title'))}</h2>`,
+          vNode.global.get('author') &&
+            `<small class="slider-doc-document-author">作者：${htmlEscape(vNode.global.get('author'))}</small>`
+        ]
+          .filter(Boolean)
+          .join(''),
+        vNode,
+        ctx
+      )}${render(vNode.children)}`
+    }
+    return render()
+  },
   (vNode: LvlNode, ctx, render) => {
     if (vNode.type === 'lvl') {
       return `${ctx.renderSection(
@@ -140,7 +158,12 @@ function generateHTML(
     index: 0
   }
 
-  return runSeq(renderList, [documentNode.children, state])
+  const cloned = new DocumentNode()
+  Object.assign(cloned, documentNode)
+  cloned.children = []
+  const globalScreen = runSeq(renderList, [cloned, state])
+
+  return globalScreen + runSeq(renderList, [documentNode.children, state])
 }
 
 function randomInt(min = 0, max = 1) {
@@ -163,12 +186,23 @@ function sliderDoc(
     injectIdPrefix = 'slider-doc_'
   }: Options = {}
 ) {
-  const docElem = global.document.documentElement.cloneNode(true) as any
+  const bodyElem = document.body.cloneNode(true) as any
+
+  const bodyContainer = document.createElement('div')
+  bodyElem.children.forEach((child) => bodyContainer.appendChild(child))
+
+  bodyContainer.style.opacity = '0'
+  bodyContainer.style.zIndex = '-1000'
+  bodyContainer.style.pointerEvents = 'none'
+
+  document.body.appendChild(bodyContainer)
+
   excludes.forEach((selectorExclude) => {
-    const elems = selectAll(docElem, selectorExclude)
+    const elems = selectAll(bodyContainer, selectorExclude)
     elems.forEach((elem) => elem.remove())
   })
-  const documentNode = parseElementTree(docElem, selector)
+
+  const documentNode = parseElementTree(bodyContainer, selector, { allowInnerText: true })
 
   let count = 0
   renderSection =
@@ -206,6 +240,38 @@ ${html}
     // keyboardCondition: 'focused'
   })
   reveal.initialize()
+  reveal.bodyContainer = bodyContainer
+
+  reveal.destroy = () => {
+    m.stop()
+    reveal.bodyContainer.remove()
+    reveal.getRevealElement().remove()
+  }
+
+  const m = new HotKeyChainManager(document as any)
+    .on('mod+escape', (event, next) => {
+      reveal.destroy()
+    })
+    .start()
+
+  function resetSlideScrolling(slide) {
+    slide.classList.remove('slider-doc-scrollable-slide')
+  }
+
+  function handleSlideScrolling(slide) {
+    if (slide.clientHeight >= 700) {
+      slide.classList.add('slider-doc-scrollable-slide')
+    }
+  }
+
+  reveal.addEventListener('ready', function (event) {
+    handleSlideScrolling(event.currentSlide)
+  })
+
+  reveal.addEventListener('slidechanged', function (event) {
+    resetSlideScrolling(event.previousSlide)
+    handleSlideScrolling(event.currentSlide)
+  })
 
   return reveal
 }
