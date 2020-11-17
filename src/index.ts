@@ -212,8 +212,6 @@ function sliderDoc(
   // return
   const documentNode = parseElementTree(bodyContainer, selector, { allowInnerText: true })
 
-  console.log(documentNode)
-
   let count = 0
   renderSection =
     renderSection ||
