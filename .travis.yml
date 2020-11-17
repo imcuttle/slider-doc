@@ -16,8 +16,6 @@ jobs:
       allow_failure: true
       script: npm run example:build
       deploy:
-        edge:
-          branch: v1.8.47
         provider: pages
         skip_cleanup: true
         github_token: ${GH_TOKEN} # Set in travis-ci.org dashboard
