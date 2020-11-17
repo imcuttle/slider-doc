@@ -11,6 +11,8 @@
 
 一建转换文档为 PPT 演示
 
+[在线 DEMO](http://imcuttle.github.io/slider-doc)
+
 **快捷键列表：**
 
 - ESC / O : 打开整体预览模式
