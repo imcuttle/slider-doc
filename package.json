@@ -106,6 +106,6 @@
     "hotkey-chain": "^1.0.0",
     "reveal.js": "^4.1.0",
     "run-seq": "^1.0.4",
-    "wowsearch-parse": "^0.3.1"
+    "wowsearch-parse": "^0.4.0"
   }
 }

@@ -62,6 +62,9 @@ const defaultRenderers = [
   },
   (vNode: LvlNode, ctx, render) => {
     if (vNode.type === 'lvl') {
+      if (!vNode.value.trim()) {
+        return ''
+      }
       return `${ctx.renderSection(
         (vNode.domNode as HTMLElement).outerHTML || htmlEscape(vNode.value),
         vNode,
@@ -72,6 +75,9 @@ const defaultRenderers = [
   },
   (vNode: ContentNode, ctx, render) => {
     if (vNode.type === 'text') {
+      if (!vNode.value.trim()) {
+        return ''
+      }
       return `${(vNode.domNode as HTMLElement).outerHTML || htmlEscape(vNode.value)}`
     }
     return render()
@@ -158,8 +164,6 @@ function generateHTML(
     index: 0
   }
 
-  console.log('documentNode', documentNode)
-
   const cloned = new DocumentNode()
   Object.assign(cloned, documentNode)
   cloned.children = []
@@ -205,12 +209,19 @@ function sliderDoc(
     const elems = selectAll(bodyContainer, selectorExclude)
     elems.forEach((elem) => elem.remove())
   })
+  // return
   const documentNode = parseElementTree(bodyContainer, selector, { allowInnerText: true })
+
+  console.log(documentNode)
 
   let count = 0
   renderSection =
     renderSection ||
     ((child, node, ctx) => {
+      child = child.trim()
+      if (!child) {
+        return ''
+      }
       if (ctx.depth > 2) {
         return child
       }
@@ -258,17 +269,17 @@ ${html}
     .start()
 
   function resetSlideScrolling(slide) {
-    slide.classList.remove('slider-doc-scrollable-slide')
+    slide?.classList?.remove('slider-doc-scrollable-slide')
   }
 
   function handleSlideScrolling(slide) {
-    if (slide.clientHeight >= 700) {
-      slide.classList.add('slider-doc-scrollable-slide')
+    if (slide?.clientHeight >= 700) {
+      slide?.classList?.add('slider-doc-scrollable-slide')
     }
   }
 
   reveal.addEventListener('ready', function (event) {
-    handleSlideScrolling(event.currentSlide || event.currentTarget)
+    handleSlideScrolling(event.currentSlide)
   })
 
   reveal.addEventListener('slidechanged', function (event) {
