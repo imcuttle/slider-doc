@@ -1,6 +1,6 @@
 {
   "name": "slider-doc",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "Make html element to be slider view",
   "author": "imcuttle <imcuttle@163.com>",
   "cdn": "dist/slider-doc.min.js",
