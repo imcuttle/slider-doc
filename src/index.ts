@@ -36,6 +36,7 @@ type Options = {
   excludes?: Selector[]
   mountContainer?: Element
   revealConfig?: any
+  parseElementTreeConfig?: Parameters<typeof parseElementTree>[2]
   renderers?: typeof defaultRenderers
   renderSection?(child: string, node: any, ctx: any): string
   renderSectionAttrs?(node: any, ctx: any): string
@@ -88,6 +89,13 @@ const defaultRenderers = [
         return ''
       }
       return `<pre><code data-trim data-noescape>${htmlEscape(vNode.value)}</code></pre>`
+    }
+    return render()
+  },
+  (vNode: ContentNode, ctx, render) => {
+    if (vNode.type === 'image') {
+      // @ts-ignore
+      return vNode.domNode.outerHTML
     }
     return render()
   }
@@ -191,6 +199,7 @@ function sliderDoc(
     document = global.document,
     excludes = [],
     revealConfig,
+    parseElementTreeConfig,
     mountContainer = document.body,
     renderers = [],
     renderSection,
@@ -223,11 +232,12 @@ function sliderDoc(
     allowInnerText: true,
     // @ts-ignore
     transformNode: (node) => {
-      if (node.value && !node.value.trim()) {
-        node.value = node.value.trim()
+      if (node.type === 'image') {
+        node.value = 'img value placeholder'
       }
       return node
-    }
+    },
+    ...parseElementTreeConfig
   })
   // console.log(documentNode)
 
