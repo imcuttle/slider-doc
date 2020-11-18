@@ -142,7 +142,7 @@ Reveal.js 挂载的节点
 
 ## Todo
 
-- [ ] Feet: 生成 reveal.js 的 dom 实例，而不是 html，可以带上 dom 交互（如 React 组件）
+- [ ] Feat: 生成 reveal.js 的 dom 实例，而不是 html，可以带上 dom 交互（如 React 组件）
 
 ## Contributing
 
