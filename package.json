@@ -1,6 +1,6 @@
 {
   "name": "slider-doc",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "Make html element to be slider view",
   "author": "imcuttle <imcuttle@163.com>",
   "cdn": "dist/slider-doc.min.js",
@@ -106,6 +106,6 @@
     "hotkey-chain": "^1.0.0",
     "reveal.js": "^4.1.0",
     "run-seq": "^1.0.4",
-    "wowsearch-parse": "^0.3.1"
+    "wowsearch-parse": "^0.4.0"
   }
 }
