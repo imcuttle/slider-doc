@@ -19,6 +19,46 @@
 - Cmd + ESC / Ctrl + ESC: 退出 PPT 模式
 - 方向键：PPT 翻页
 
+## 原理
+
+![image.png](https://i.loli.net/2020/11/18/J9WMnEPr6D7C5aL.png)
+
+解析 DOM 树，生成树结构如下：
+
+```html
+<h1>标题</h1>
+<p>内容</p>
+<h2>标题2</h2>
+<p>内容2</p>
+```
+
+会解析成
+
+```json5
+{
+  type: 'lvl',
+  level: 1,
+  value: '标题',
+  children: [
+    {
+      type: 'text',
+      value: '内容'
+    },
+    {
+      type: 'lvl',
+      level: 2,
+      value: '标题2',
+      children: [
+        {
+          type: 'text',
+          value: '内容2'
+        }
+      ]
+    }
+  ]
+}
+```
+
 ## Installation
 
 ```bash
@@ -30,7 +70,7 @@ yarn add slider-doc
 ## Usage
 
 ```javascript
-const sliderDoc = require('slider-doc')
+import sliderDoc from 'slider-doc'
 
 const silder = sliderDoc({
   lvl0: '.doc h1',
@@ -40,6 +80,69 @@ const silder = sliderDoc({
   lvl4: '.doc h5'
 })
 ```
+
+## API
+
+### `sliderDoc(selectors, options?)`
+
+#### `selectors`
+
+- **Type:** [Selectors](https://github.com/big-wheel/wowsearch/tree/master/packages/wowsearch#selectors-1)
+
+#### `options`
+
+##### `document`
+
+- **Type:** `Document`
+- **Default:** `document`
+
+##### `excludes`
+
+解析 dom 之前，需要剔除的 element
+
+- **Type:** `Selector[]` - see [Selector](https://github.com/big-wheel/wowsearch/tree/master/packages/wowsearch#selector)
+- **Default:** `[]`
+
+##### `revealConfig`
+
+Reveal.js 的[配置](https://revealjs.com/config/)
+
+##### `mountContainer`
+
+Reveal.js 挂载的节点
+
+- **Type:** `Element`
+- **Default:** `document.body`
+
+##### `renderers`
+
+自定义渲染
+
+- **Type:** `Array<(vNode, ctx, next) => string>`
+- **Default:** `[]`
+- **Example:**
+
+  ```js
+  ;[
+    (vNode, ctx, next) => {
+      if (vNode.type === 'text') {
+        return `<span>${vNode.value}</span>`
+      }
+      return next()
+    }
+  ]
+  ```
+
+##### `renderSectionAttrs`
+
+渲染外层 Section 时候注入的属性
+
+- **Type:** `(vNode, ctx) => string`
+- **Default:** `() => 'data-transition="fade-in slide-out"'`
+
+## Todo
+
+- [ ] Feet: 生成 reveal.js 的 dom 实例，而不是 html，可以带上 dom 交互（如 React 组件）
 
 ## Contributing
 
