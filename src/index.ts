@@ -282,6 +282,7 @@ ${html}
   })
   reveal.initialize()
   reveal.bodyContainer = bodyContainer
+  reveal.documentNode = documentNode
 
   reveal.destroy = () => {
     m.stop()
