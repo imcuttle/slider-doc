@@ -89,6 +89,14 @@ const silder = sliderDoc({
 
 - **Type:** [Selectors](https://github.com/big-wheel/wowsearch/tree/master/packages/wowsearch#selectors-1)
 
+同时扩展了 code 类型的 text selector，方便展示代码块
+
+```json5
+{
+  code: '.post pre'
+}
+```
+
 #### `options`
 
 ##### `document`

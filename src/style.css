@@ -6,6 +6,10 @@
   bottom: 0;
 }
 
+.slider-doc-container section {
+  overflow-x: auto;
+}
+
 .slider-doc-container *[hidden] {
   display: inherit !important;
 }

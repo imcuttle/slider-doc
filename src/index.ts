@@ -81,6 +81,15 @@ const defaultRenderers = [
       return `${(vNode.domNode as HTMLElement).outerHTML || htmlEscape(vNode.value)}`
     }
     return render()
+  },
+  (vNode: ContentNode, ctx, render) => {
+    if (vNode.type === 'code') {
+      if (!vNode.value.trim()) {
+        return ''
+      }
+      return `<pre><code data-trim data-noescape>${htmlEscape(vNode.value)}</code></pre>`
+    }
+    return render()
   }
 ]
 
@@ -209,8 +218,9 @@ function sliderDoc(
     const elems = selectAll(bodyContainer, selectorExclude)
     elems.forEach((elem) => elem.remove())
   })
-  // return
+
   const documentNode = parseElementTree(bodyContainer, selector, { allowInnerText: true })
+  // console.log(documentNode)
 
   let count = 0
   renderSection =
