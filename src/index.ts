@@ -219,7 +219,16 @@ function sliderDoc(
     elems.forEach((elem) => elem.remove())
   })
 
-  const documentNode = parseElementTree(bodyContainer, selector, { allowInnerText: true })
+  const documentNode = parseElementTree(bodyContainer, selector, {
+    allowInnerText: true,
+    // @ts-ignore
+    transformNode: (node) => {
+      if (node.value && !node.value.trim()) {
+        node.value = node.value.trim()
+      }
+      return node
+    }
+  })
   // console.log(documentNode)
 
   let count = 0
