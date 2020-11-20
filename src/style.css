@@ -8,13 +8,14 @@
 
 .slider-doc-container section {
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .slider-doc-container *[hidden] {
   display: inherit !important;
 }
 
-.slider-doc-scrollable-slide {
+.slider-doc-container .slider-doc-scrollable-slide {
   height: 700px;
   overflow-y: auto !important;
 }
